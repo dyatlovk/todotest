@@ -1,0 +1,7 @@
+docker/mariadb/lib
+docker/opt
+docker/shared
+docker/ssl
+var
+vendor
+.*cache

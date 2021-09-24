@@ -1,0 +1,22 @@
+{
+  "name": "todo/app",
+  "description": "todo app",
+  "type": "project",
+  "license": "MIT",
+  "authors": [{
+    "name": "Kirill Dyatlov",
+    "email": "kirill.dyatlov.webdeveloper@yandex.ru"
+  }],
+  "require": {
+    "php": "7.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.1"
+  }
+}

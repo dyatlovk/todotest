@@ -1,0 +1,62 @@
+version: '3.3'
+services:
+    mysql:
+        container_name: todo_mysql
+        image: mariadb:10.3
+        restart: 'no'
+        environment:
+            - MYSQL_ROOT_HOST=%
+            - MYSQL_ROOT_PASSWORD=654321
+        ports:
+            - "127.0.0.1:3311:3306"
+        volumes:
+            - ./mariadb/my.cnf:/etc/mysql/my.cnf
+            - ./mariadb/lib:/var/lib/mysql
+            - ./shared:/home/docker/shared/
+        networks:
+            - app-net
+
+    nginx:
+        container_name: todo_nginx
+        image: nginx:1.20
+        links:
+            - app
+        ports:
+            - "127.0.0.1:8089:80"
+            - "127.0.0.1:3040:443"
+        networks:
+            - app-net
+        volumes:
+            - ../:/var/www
+            - ./ssl/:/ssl/
+            - ./shared:/home/docker/shared/
+            - ./nginx/todo.conf:/etc/nginx/conf.d/todo.conf
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - /var/tmp/todo/log/nginx:/var/log/nginx
+
+    app:
+       build:
+            context: ./php
+            dockerfile: Dockerfile
+       container_name: todo_app
+       working_dir: /var/www/
+       tty: true
+       hostname: app
+       privileged: true
+       links:
+            - mysql
+       volumes:
+            - ~/.composer:/.composer
+            - ../:/var/www
+            - /var/tmp/todo:/var/www/var
+            - /var/tmp/todo.:/dev/shm
+            - ./opt:/opt
+            - ./shared:/home/docker/shared/
+            - ./php/fpm/www.conf:/etc/php/7.4/fpm/pool.d/www.conf
+            - ./php/fpm/php.ini:/etc/php/7.4/fpm/php.ini
+       networks:
+            - app-net
+
+networks:
+       app-net:
+            driver: bridge
