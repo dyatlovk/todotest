@@ -1,8 +1,11 @@
-<?php $this->start(); ?>Home<?php $this->end('title'); ?>
+<?php
+use App\Model\Task;
+
+$this->start(); ?>Home<?php $this->end('title'); ?>
 
 <?php $this->start(); ?>
 <div class="container-fluid">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -14,19 +17,19 @@
             </tr>
         </thead>
         <tbody>
-         <?php for ($i = 1; $i <= 7; ++$i) { ?>
+         <?php foreach ($taskList as $taskItem): ?>
             <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Otto</td>
-                <td>Closed</td>
+                <th scope="row"><?php echo $taskItem['task_id']; ?></th>
+                <td><?php echo $taskItem['user_name']; ?></td>
+                <td><?php echo $taskItem['user_email']; ?></td>
+                <td><?php echo $taskItem['task_text']; ?></td>
+                <td><?php echo Task::STATUSES[$taskItem['tast_status']]; ?></td>
                 <td>
-                    <a href="/task/<?php echo $i; ?>/edit">Edit</a>
-                    <a href="/task/<?php echo $i; ?>/show">Show</a>
+                    <a href="/task/<?php echo $taskItem['task_id']; ?>/edit">Edit</a>
+                    <a href="/task/<?php echo $taskItem['task_id']; ?>/show">Show</a>
                 </td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
         </tbody>
     </table>
 </div>
