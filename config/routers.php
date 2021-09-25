@@ -5,6 +5,8 @@ use App\System\Router;
 Router::add('/', Router::GET, 'App\Controller\HomepageController::index');
 
 // Tasks
+Router::add('/task/add', Router::GET, 'App\Controller\TasksController::add');
+Router::add('/task/create', Router::POST, 'App\Controller\TasksController::create');
 Router::add('/task/(\d+)/edit', Router::GET, 'App\Controller\TasksController::edit');
 Router::add('/task/(\d+)/show', Router::GET, 'App\Controller\TasksController::show');
 Router::add('/task/(\d+)/update', Router::POST, 'App\Controller\TasksController::update');

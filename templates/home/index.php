@@ -5,6 +5,7 @@ $this->start(); ?>Home<?php $this->end('title'); ?>
 
 <?php $this->start(); ?>
 <div class="container-fluid">
+    <a href="/task/add">Create</a>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>

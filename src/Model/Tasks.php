@@ -88,7 +88,7 @@ class Tasks
         return null;
     }
 
-    public function getStatusesList(int $actual): array
+    public function getStatusesList(?int $actual): array
     {
         $map = self::STATUSES;
         $result = [];
@@ -104,15 +104,29 @@ class Tasks
         return $result;
     }
 
+    public function create(array $data): bool
+    {
+        $sql = 'INSERT INTO tasks (title, text, status, user_id)
+        VALUES(:title, :text, :status, :userId)';
+        $conn = $this->getConnection();
+        $query = $conn->prepare($sql);
+        $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
+        $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
+        $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
+        $query->bindValue(':userId', 1, PDO::PARAM_INT);
+
+        return $query->execute();
+    }
+
     public function update(array $data): bool
     {
         $sql = 'UPDATE tasks t SET t.title =:title, t.text = :text, t.status =:status WHERE t.id = :id';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
-        $query->bindValue(':title', $data['title']);
-        $query->bindValue(':text', $data['text']);
-        $query->bindValue(':status', $data['status']);
-        $query->bindValue(':id', $data['id']);
+        $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
+        $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
+        $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
+        $query->bindValue(':id', $data['id'], PDO::PARAM_INT);
 
         return $query->execute();
     }
