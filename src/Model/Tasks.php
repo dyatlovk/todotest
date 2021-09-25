@@ -117,6 +117,16 @@ class Tasks
         return $query->execute();
     }
 
+    public function delete(int $taskId): bool
+    {
+        $sql = 'DELETE FROM tasks WHERE id = :id';
+        $conn = $this->getConnection();
+        $query = $conn->prepare($sql);
+        $query->bindValue(':id', $taskId);
+
+        return $query->execute();
+    }
+
     private function getConnection(): PDO
     {
         $app = Kernel::getInstance();

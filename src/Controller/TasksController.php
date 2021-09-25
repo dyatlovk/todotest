@@ -79,4 +79,22 @@ class TasksController
 
         header('Location: /');
     }
+
+    public function delete(array $routerArgs): void
+    {
+        $taskId = (int) $routerArgs[0];
+        $taskModel = new Tasks();
+        $task = $taskModel->findSingle($taskId);
+        if (empty($task)) {
+            header('HTTP/1.0 404 Not Found');
+
+            return;
+        }
+        $result = $taskModel->delete($taskId);
+        if (false == $result) {
+            return;
+        }
+
+        header('Location: /');
+    }
 }

@@ -9,6 +9,7 @@ class Router
     public const PUT = 'PUT';
     public const GET = 'GET';
     public const POST = 'POST';
+    public const DELETE = 'DELETE';
 
     private static $pathNotFound = null;
     private static $methodNotAllowed = null;

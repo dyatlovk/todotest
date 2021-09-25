@@ -27,6 +27,7 @@ $this->start(); ?>Home<?php $this->end('title'); ?>
                 <td>
                     <a href="/task/<?php echo $taskItem['task_id']; ?>/edit">Edit</a>
                     <a href="/task/<?php echo $taskItem['task_id']; ?>/show">Show</a>
+                    <a href="/task/<?php echo $taskItem['task_id']; ?>/delete">Delete</a>
                 </td>
             </tr>
         <?php endforeach;?>

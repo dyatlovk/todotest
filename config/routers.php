@@ -8,6 +8,7 @@ Router::add('/', Router::GET, 'App\Controller\HomepageController::index');
 Router::add('/task/(\d+)/edit', Router::GET, 'App\Controller\TasksController::edit');
 Router::add('/task/(\d+)/show', Router::GET, 'App\Controller\TasksController::show');
 Router::add('/task/(\d+)/update', Router::POST, 'App\Controller\TasksController::update');
+Router::add('/task/(\d+)/delete', Router::GET, 'App\Controller\TasksController::delete');
 
 // Security
 Router::add('/login', Router::GET, 'App\Controller\SecurityController::login');
