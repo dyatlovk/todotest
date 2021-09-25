@@ -47,8 +47,8 @@ class Tasks
     public function findById(int $id): array
     {
         $conn = $this->getConnection();
-        $sql = 'SELECT t.id as task_id, t.title as task_title, t.text as task_text
-        FROM tasks t WHERE t.id = :task_id';
+        $sql = 'SELECT t.id as task_id, t.title as task_title, t.text as task_text,
+        t.status as task_status FROM tasks t WHERE t.id = :task_id';
 
         $query = $conn->prepare($sql);
         if (false == $query) {
@@ -86,6 +86,22 @@ class Tasks
         }
 
         return null;
+    }
+
+    public function getStatusesList(int $actual): array
+    {
+        $map = self::STATUSES;
+        $result = [];
+        foreach ($map as $id => $item) {
+            $result[$id]['isSelected'] = false;
+            $result[$id]['value'] = $id;
+            $result[$id]['name'] = $item;
+            if ($actual == $id) {
+                $result[$id]['isSelected'] = true;
+            }
+        }
+
+        return $result;
     }
 
     private function getConnection(): PDO
