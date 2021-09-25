@@ -24,7 +24,7 @@ $this->start(); ?>Home<?php $this->end('title'); ?>
                 <td><?php echo $taskItem['user_name']; ?></td>
                 <td><?php echo $taskItem['user_email']; ?></td>
                 <td><?php echo $taskItem['task_text']; ?></td>
-                <td><?php echo Tasks::STATUSES[$taskItem['task_status']]; ?></td>
+                <td><?php echo Tasks::STATUSES[$taskItem['task_status']]; ?> <?php if($taskItem['modified_by']):?>(Admin edited)<?php endif; ?></td>
                 <td>
                     <a href="/task/<?php echo $taskItem['task_id']; ?>/edit">Edit</a>
                     <a href="/task/<?php echo $taskItem['task_id']; ?>/show">Show</a>

@@ -33,13 +33,13 @@ class TasksController extends BaseController
 
     public function edit(array $routerArgs): void
     {
-        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             $this->createNotFound();
         }
+        $this->allowOwnerOrAdmin($task);
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
         $currentStatusId = (int) $task['task_status'];
@@ -91,9 +91,10 @@ class TasksController extends BaseController
 
     public function update(array $routerArgs): void
     {
-        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
+        $task = $taskModel->findSingle($taskId);
+        $this->allowOwnerOrAdmin($task);
         $formData = $_POST[self::FORM_NAME];
         $formValidator = new TaskValidator();
         $formValidator->validateData($formData);
@@ -106,7 +107,8 @@ class TasksController extends BaseController
         $formData = array_merge($formData, ['id' => $taskId]);
         $dataSanitizer = new TaskSanitize();
         $cleanedData = $dataSanitizer->prepare($formData)->getCleaned();
-        $result = $taskModel->update($cleanedData);
+        $asAdmin = $this->isUserAdmin();
+        $result = $taskModel->update($cleanedData, $asAdmin);
         if (false == $result) {
             return;
         }
@@ -116,13 +118,13 @@ class TasksController extends BaseController
 
     public function delete(array $routerArgs): void
     {
-        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             $this->createNotFound();
         }
+        $this->allowOwnerOrAdmin($task);
         $result = $taskModel->delete($taskId);
         if (false == $result) {
             return;

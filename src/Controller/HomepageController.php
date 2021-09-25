@@ -9,7 +9,7 @@ use App\System\Templates;
 
 class HomepageController
 {
-    private const ITEMS_ON_PAGE = 10;
+    private const ITEMS_ON_PAGE = 4;
 
     public function index(): void
     {

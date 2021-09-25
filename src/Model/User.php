@@ -9,10 +9,14 @@ use PDO;
 
 class User
 {
+    public const ROLE_ADMIN = 1;
+    public const ROLE_USER = null;
+    public const ADMIN_EMAIL = 'admin@email.com';
+
     public function findByEmail(string $email): array
     {
         $conn = $this->getConnection();
-        $sql = 'SELECT u.id as user_id, u.email as user_email, u.username as user_name, u.password as password FROM user u WHERE u.email = :email';
+        $sql = 'SELECT u.id as user_id, u.email as user_email, u.username as user_name, u.password as password, u.role as user_role FROM user u WHERE u.email = :email';
         $query = $conn->prepare($sql);
         $query->bindValue(':email', $email, PDO::PARAM_STR);
         $query->execute();
@@ -79,6 +83,30 @@ class User
     {
         $user = $this->loadFromSession();
         if (empty($user)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isAdmin(): bool
+    {
+        $user = $this->loadFromSession();
+        if (empty($user)) {
+            return false;
+        }
+
+        if (self::ROLE_ADMIN !== (int) $user['user_role']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isTaskOwner(int $userId): bool
+    {
+        $user = $this->loadFromSession();
+        if ((int) $user['user_id'] !== $userId) {
             return false;
         }
 
