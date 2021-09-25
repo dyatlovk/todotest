@@ -2,7 +2,15 @@
 
 <?php $this->start(); ?>
 <div class="container-fluid">
-    show task
+    <div>
+        <?php echo $task['task_id']; ?>
+    </div>
+    <div>
+        <?php echo $task['task_title']; ?>
+    </div>
+    <div>
+        <?php echo $task['task_text']; ?>
+    </div>
 </div>
 <?php $this->end('content'); ?>
 

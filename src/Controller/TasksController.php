@@ -24,6 +24,11 @@ class TasksController
         $taskId = (int) $routerArgs[0];
         $taskModel = new Task();
         $task = $taskModel->findById($taskId);
+        if(empty($task)) {
+            header('HTTP/1.0 404 Not Found');
+
+            return;
+        }
         echo (new Templates())->render('tasks/show.php', [
             'task' => $task,
         ]);
