@@ -18,7 +18,8 @@ class HomepageController
             $page = 0;
         }
         $taskModel = new Tasks();
-        $list = $taskModel->getAll(($page - 1) * self::ITEMS_ON_PAGE, self::ITEMS_ON_PAGE);
+        $startFrom = ($page - 1) * self::ITEMS_ON_PAGE;
+        $list = $taskModel->getAll($startFrom, self::ITEMS_ON_PAGE);
         $pages = $taskModel->pages(self::ITEMS_ON_PAGE);
         echo (new Templates())->render('home/index.php', [
             'taskList' => $list,

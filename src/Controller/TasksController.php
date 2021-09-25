@@ -13,13 +13,14 @@ class TasksController
     {
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
-        $task = $taskModel->findById($taskId);
-        $statuses = $taskModel->getStatusesList((int) $task['task_status']);
+        $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             header('HTTP/1.0 404 Not Found');
 
             return;
         }
+        $currentStatusId = (int) $task['task_status'];
+        $statuses = $taskModel->getStatusesList($currentStatusId);
         echo (new Templates())->render('tasks/edit.php', [
             'task' => $task,
             'statuses' => $statuses,
@@ -30,7 +31,7 @@ class TasksController
     {
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
-        $task = $taskModel->findById($taskId);
+        $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             header('HTTP/1.0 404 Not Found');
 
@@ -39,14 +40,5 @@ class TasksController
         echo (new Templates())->render('tasks/show.php', [
             'task' => $task,
         ]);
-    }
-
-    private function routerArgsIsExists(array $args = []): void
-    {
-        if (!isset($args[0])) {
-            header('HTTP/1.0 404 Not Found');
-
-            return;
-        }
     }
 }

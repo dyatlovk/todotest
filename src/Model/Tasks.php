@@ -44,7 +44,7 @@ class Tasks
         return $result;
     }
 
-    public function findById(int $id): array
+    public function findSingle(int $id): array
     {
         $conn = $this->getConnection();
         $sql = 'SELECT t.id as task_id, t.title as task_title, t.text as task_text,
