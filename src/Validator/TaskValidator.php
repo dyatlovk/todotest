@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-class TaskValidator
+class TaskValidator implements ValidatorInterface
 {
     private ?array $errors = null;
 
