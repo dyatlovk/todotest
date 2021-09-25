@@ -15,5 +15,6 @@ Router::add('/task/(\d+)/delete', Router::GET, 'App\Controller\TasksController::
 // Security
 Router::add('/login', Router::GET, 'App\Controller\SecurityController::login');
 Router::add('/logout', Router::GET, 'App\Controller\SecurityController::logout');
+Router::add('/login/check', Router::POST, 'App\Controller\SecurityController::check');
 
 Router::run();

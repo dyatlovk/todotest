@@ -9,12 +9,13 @@ use App\Sanitizer\TaskSanitize;
 use App\System\Templates;
 use App\Validator\TaskValidator;
 
-class TasksController
+class TasksController extends BaseController
 {
     private const FORM_NAME = 'task';
 
     public function add(): void
     {
+        $this->denyAnon();
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $previousData = $_SESSION[self::FORM_NAME]['data'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
@@ -32,13 +33,12 @@ class TasksController
 
     public function edit(array $routerArgs): void
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
-            header('HTTP/1.0 404 Not Found');
-
-            return;
+            $this->createNotFound();
         }
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
@@ -58,9 +58,7 @@ class TasksController
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
-            header('HTTP/1.0 404 Not Found');
-
-            return;
+            $this->createNotFound();
         }
         echo (new Templates())->render('tasks/show.php', [
             'task' => $task,
@@ -69,6 +67,7 @@ class TasksController
 
     public function create(): void
     {
+        $this->denyAnon();
         $formData = $_POST[self::FORM_NAME];
         $formValidator = new TaskValidator();
         $formValidator->validateData($formData);
@@ -92,6 +91,7 @@ class TasksController
 
     public function update(array $routerArgs): void
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $formData = $_POST[self::FORM_NAME];
@@ -116,13 +116,12 @@ class TasksController
 
     public function delete(array $routerArgs): void
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
-            header('HTTP/1.0 404 Not Found');
-
-            return;
+            $this->createNotFound();
         }
         $result = $taskModel->delete($taskId);
         if (false == $result) {

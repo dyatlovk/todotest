@@ -4,15 +4,40 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\User;
+use App\System\Templates;
+
 class SecurityController
 {
+    private const LOGIN_FORM_NAME = 'login';
+
     public function login(): void
     {
-        echo 'login';
+        $authError = $_SESSION['credentials_error'];
+        $_SESSION['credentials_error'] = null;
+        echo (new Templates())->render('security/login.php', [
+            'formName' => self::LOGIN_FORM_NAME,
+            'authError' => $authError,
+        ]);
+    }
+
+    public function check(): void
+    {
+        $data = $_POST[self::LOGIN_FORM_NAME];
+        $userModel = new User();
+        $isAuth = $userModel->authenticate($data);
+        if (!$isAuth) {
+            $_SESSION['credentials_error'] = 'Bad credentials';
+            header('Location: /login');
+
+            return;
+        }
+        header('Location: /');
     }
 
     public function logout(): void
     {
-        echo 'logout';
+        $_SESSION['user'] = null;
+        header('Location: /');
     }
 }

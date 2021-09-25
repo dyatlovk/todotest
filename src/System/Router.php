@@ -56,8 +56,13 @@ class Router
                     if ('' != $basepath && '/' != $basepath) {
                         array_shift($matches);
                     }
-                    $controller = $route['controller'];
-                    call_user_func($controller, $matches);
+                    $controllerName = $route['controller'];
+                    $controllerParts = explode('::', $controllerName);
+                    $controller = $controllerParts[0];
+                    $controllerAction = $controllerParts[1];
+                    $cont = new $controller();
+                    $cont->$controllerAction($matches);
+                    /* call_user_func($controller, $matches); */
                     $route_match_found = true;
                     break;
                 }

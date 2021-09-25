@@ -15,3 +15,19 @@ body {
 main {
     flex-grow: 1;
 }
+
+.login-page main {
+    display: flex;
+    align-content: center;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.invalid {
+    color: red;
+}
