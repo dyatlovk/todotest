@@ -6,6 +6,8 @@ namespace App\System;
 
 class Kernel
 {
+    public const NAME = 'kernel';
+
     private array $db;
 
     public function boot(): void
@@ -25,6 +27,14 @@ class Kernel
         $conn = $db->connect();
 
         return $conn;
+    }
+
+    public static function getInstance(): self
+    {
+        /** @var Kernel $app */
+        $app = $GLOBALS[Kernel::NAME];
+
+        return $app;
     }
 
     private function loadConfig(): void
