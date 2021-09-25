@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Task;
 use App\System\Templates;
 
 class TasksController
@@ -13,8 +14,18 @@ class TasksController
         echo (new Templates())->render('tasks/edit.php');
     }
 
-    public function show():void
+    public function show(array $routerArgs): void
     {
-        echo (new Templates())->render('tasks/show.php');
+        if (!isset($routerArgs[0])) {
+            header('HTTP/1.0 404 Not Found');
+
+            return;
+        }
+        $taskId = (int) $routerArgs[0];
+        $taskModel = new Task();
+        $task = $taskModel->findById($taskId);
+        echo (new Templates())->render('tasks/show.php', [
+            'task' => $task,
+        ]);
     }
 }

@@ -9,18 +9,22 @@ use PDOException;
 
 class Dbase
 {
+    private array $connParams;
+
+    public function __construct(array $connParams)
+    {
+        $this->connParams = $connParams;
+    }
+
     public function connect(): PDO
     {
-        /** @var Kernel $app */
-        $app = $GLOBALS['kernel'];
-        $connConfig = $app->getDbConfig();
         try {
             $dsn = $this->constructPdoDsn([
-                'host' => $connConfig['host'],
-                'port' => $connConfig['port'],
-                'dbname' => $connConfig['dbname'],
+                'host' => $this->connParams['host'],
+                'port' => $this->connParams['port'],
+                'dbname' => $this->connParams['dbname'],
             ]);
-            $pdo = new PDO($dsn, $connConfig['user'], $connConfig['pass']);
+            $pdo = new PDO($dsn, $this->connParams['user'], $this->connParams['pass']);
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

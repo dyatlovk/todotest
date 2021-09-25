@@ -19,9 +19,12 @@ class Kernel
         return __DIR__ . '/../../';
     }
 
-    public function getDbConfig(): array
+    public function getDbConnection(): \PDO
     {
-        return $this->db;
+        $db = new Dbase($this->db);
+        $conn = $db->connect();
+
+        return $conn;
     }
 
     private function loadConfig(): void
