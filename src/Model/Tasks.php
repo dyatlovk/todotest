@@ -7,7 +7,7 @@ namespace App\Model;
 use App\System\Kernel;
 use PDO;
 
-class Task
+class Tasks
 {
     public const STATUS_OPEN = 1;
     public const STATUS_CLOSE = 2;
@@ -88,10 +88,9 @@ class Task
         return null;
     }
 
-    private static function getConnection(): PDO
+    private function getConnection(): PDO
     {
-        /** @var Kernel $app */
-        $app = $GLOBALS['kernel'];
+        $app = Kernel::getInstance();
 
         return $app->getDbConnection();
     }

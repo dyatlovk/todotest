@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Task;
+use App\Model\Tasks;
 use App\System\Templates;
 
 class TasksController
@@ -22,7 +22,7 @@ class TasksController
             return;
         }
         $taskId = (int) $routerArgs[0];
-        $taskModel = new Task();
+        $taskModel = new Tasks();
         $task = $taskModel->findById($taskId);
         if(empty($task)) {
             header('HTTP/1.0 404 Not Found');

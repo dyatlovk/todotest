@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Task;
+use App\Model\Tasks;
 use App\System\Templates;
 
 class HomepageController
@@ -17,7 +17,7 @@ class HomepageController
         if (1 == $page) {
             $page = 0;
         }
-        $taskModel = new Task();
+        $taskModel = new Tasks();
         $list = $taskModel->getAll(($page - 1) * self::ITEMS_ON_PAGE, self::ITEMS_ON_PAGE);
         $pages = $taskModel->pages(self::ITEMS_ON_PAGE);
         echo (new Templates())->render('home/index.php', [
