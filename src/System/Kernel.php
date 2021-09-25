@@ -12,6 +12,7 @@ class Kernel
 
     public function boot(): void
     {
+        $this->startSession();
         $this->loadConfig();
         $this->loadRouters();
     }
@@ -48,5 +49,10 @@ class Kernel
     {
         $root = self::getRootDir();
         require_once $root . '/config/routers.php';
+    }
+
+    private function startSession(): void
+    {
+        session_start();
     }
 }

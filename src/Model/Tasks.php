@@ -104,6 +104,19 @@ class Tasks
         return $result;
     }
 
+    public function update(array $data): bool
+    {
+        $sql = 'UPDATE tasks t SET t.title =:title, t.text = :text, t.status =:status WHERE t.id = :id';
+        $conn = $this->getConnection();
+        $query = $conn->prepare($sql);
+        $query->bindValue(':title', $data['title']);
+        $query->bindValue(':text', $data['text']);
+        $query->bindValue(':status', $data['status']);
+        $query->bindValue(':id', $data['id']);
+
+        return $query->execute();
+    }
+
     private function getConnection(): PDO
     {
         $app = Kernel::getInstance();

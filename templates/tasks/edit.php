@@ -2,26 +2,32 @@
 
 <?php $this->start(); ?>
 <div class="container-fluid">
-    <form class="row g-3" method="POST">
+<form name="<?php echo $formName ?>" class="row g-3" action="/task/<?php echo $task['task_id']?>/update" method="POST">
+        <?php $titleErrorText = (isset($formErrors['children']['title'])) ? $formErrors['children']['title']: null ?>
+        <?php $textErrorText = (isset($formErrors['children']['text'])) ? $formErrors['children']['text']: null ?>
+        <?php $statusErrorText = (isset($formErrors['children']['status'])) ? $formErrors['children']['status']: null ?>
         <div class="row md-3">
             <div class="col-md-4">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" value="<?php echo $task['task_title']; ?>">
+                <input name="task[title]" type="text" class="form-control <?php echo (!is_null($titleErrorText)) ? 'is-invalid':'' ?>" id="title" value="<?php echo $task['task_title']; ?>">
+                <div class="invalid-feedback"><?php echo $titleErrorText ;?></div>
             </div>
         </div>
         <div class="row md-3">
             <div class="col-md-8">
                 <label for="text" class="form-label">Text</label>
-                <textarea class="form-control" id="text" rows="8"><?php echo $task['task_text']; ?></textarea>
+                <textarea name="task[text]" class="form-control <?php echo (!is_null($textErrorText)) ? 'is-invalid':'' ?>" id="text" rows="8"><?php echo $task['task_text']; ?></textarea>
+                <div class="invalid-feedback"><?php echo $textErrorText ;?></div>
             </div>
         </div>
         <div class="col-md-3">
             <label for="inputState" class="form-label">State</label>
-            <select id="inputState" class="form-select">
-                <?php foreach ($statuses as $status) : ?>
-                    <option <?php echo ($status['isSelected']) ? 'selected' : ''; ?> value="<?php echo $status['value']; ?>"><?php echo $status['name']; ?></option>
-                <?php endforeach; ?>
+                <select name="task[status]" id="inputState" class="form-select <?php echo (!is_null($statusErrorText)) ? 'is-invalid':'' ?>">
+                    <?php foreach ($statuses as $status) : ?>
+                        <option <?php echo ($status['isSelected']) ? 'selected' : ''; ?> value="<?php echo $status['value']; ?>"><?php echo $status['name']; ?></option>
+                    <?php endforeach; ?>
             </select>
+            <div class="invalid-feedback"><?php echo $statusErrorText ;?></div>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Submit</button>
