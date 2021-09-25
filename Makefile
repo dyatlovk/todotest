@@ -31,3 +31,6 @@ down:
 
 shell-app:
 	sudo $(docker_compose) exec app bash
+
+shell-db:
+	sudo $(docker_compose) exec mysql bash
