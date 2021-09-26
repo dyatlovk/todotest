@@ -26,7 +26,7 @@ class Dbase
             ]);
             $pdo = new PDO($dsn, $this->connParams['user'], $this->connParams['pass']);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo 'Server error';
         }
 
         return $pdo;
