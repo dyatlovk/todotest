@@ -14,6 +14,9 @@ class Pages
     private int $max;
     private int $current;
 
+    public int $start;
+    public int $end;
+
     public function __construct(string $key = 'p', int $current, $max = self::MAX)
     {
         $this->key = $key;
@@ -21,21 +24,20 @@ class Pages
         $this->current = $current;
     }
 
-    public function getRanges(): array
+    public function findBounding(): self
     {
         $start = ($this->current - 1) * $this->max;
         $end = $this->max;
         if (0 > $start) {
             $start = 0;
         }
+        $this->start = $start;
+        $this->end = $end;
 
-        return [
-            'start' => $start,
-            'end' => $end,
-        ];
+        return $this;
     }
 
-    public function getQuery(): array
+    public function buildQuery(): array
     {
         $taskModel = new Tasks();
         $pages = $taskModel->pages($this->max);

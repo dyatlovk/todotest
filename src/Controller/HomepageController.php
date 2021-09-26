@@ -18,15 +18,15 @@ class HomepageController extends BaseController
         $taskModel = new Tasks();
         $order = new Order('sort', 'dir');
         $pages = new Pages('p', $page, self::ITEMS_ON_PAGE);
-        $tasksStartAt = $pages->getRanges()['start'];
-        $tasksLimit = $pages->getRanges()['end'];
+        $tasksStartAt = $pages->findBounding()->start;
+        $tasksLimit = $pages->findBounding()->end;
         $tasksOrderExpr = $order->prepareSql();
         $list = $taskModel->getAll($tasksStartAt, $tasksLimit, $tasksOrderExpr);
 
         return $this->render('home/index.php', [
             'taskList' => $list,
-            'orderQuery' => $order->getQuery(),
-            'pageQuery' => $pages->getQuery(),
+            'orderQuery' => $order->buildQuery(),
+            'pageQuery' => $pages->buildQuery(),
         ]);
     }
 }

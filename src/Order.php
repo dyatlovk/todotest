@@ -42,7 +42,7 @@ class Order
         return $orderExpr;
     }
 
-    public function getQuery(): array
+    public function buildQuery(): array
     {
         $dir = $this->toggleDirection();
         $request = $_REQUEST;
