@@ -18,12 +18,13 @@ class User
     {
         $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = "SELECT
-            $alias.id as user_id,
-            $alias.email as user_email,
-            $alias.username as user_name,
-            $alias.password as password,
-            $alias.role as user_role
+        $sql = "
+            SELECT
+                $alias.id as user_id,
+                $alias.email as user_email,
+                $alias.username as user_name,
+                $alias.password as password,
+                $alias.role as user_role
             FROM user $alias
             WHERE $alias.email = :email";
         $query = $conn->prepare($sql);

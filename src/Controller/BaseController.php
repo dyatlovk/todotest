@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Model\User;
 use App\System\Templates;
-use Exception;
 
 class BaseController
 {
@@ -71,10 +70,6 @@ class BaseController
 
     public function render(?string $tpl, array $vars = []): string
     {
-        if (is_null($tpl)) {
-            throw new Exception('Template not found');
-        }
-
         return (new Templates())->render($tpl, $vars);
     }
 }

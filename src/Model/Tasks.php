@@ -27,14 +27,15 @@ class Tasks
         $taskAlias = self::COL_ALIAS;
         $userAlias = User::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = "SELECT
-            $taskAlias.title as task_title,
-            $taskAlias.id as task_id,
-            $taskAlias.text as task_text,
-            $taskAlias.status as task_status,
-            $taskAlias.modified_by_id as modified_by,
-            $userAlias.username as user_name,
-            $userAlias.email as user_email
+        $sql = "
+            SELECT
+                $taskAlias.title as task_title,
+                $taskAlias.id as task_id,
+                $taskAlias.text as task_text,
+                $taskAlias.status as task_status,
+                $taskAlias.modified_by_id as modified_by,
+                $userAlias.username as user_name,
+                $userAlias.email as user_email
             FROM tasks $taskAlias
             INNER JOIN user $userAlias ON $userAlias.id = $taskAlias.owner_id
             ORDER BY $orderExpr
@@ -58,12 +59,13 @@ class Tasks
     {
         $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = "SELECT
-            $alias.id as task_id,
-            $alias.title as task_title,
-            $alias.text as task_text,
-            $alias.status as task_status,
-            $alias.owner_id as task_owner
+        $sql = "
+            SELECT
+                $alias.id as task_id,
+                $alias.title as task_title,
+                $alias.text as task_text,
+                $alias.status as task_status,
+                $alias.owner_id as task_owner
             FROM tasks $alias
             WHERE $alias.id = :task_id";
 
@@ -126,8 +128,9 @@ class Tasks
     {
         $userModel = new User();
         $user = $userModel->loadFromSession();
-        $sql = 'INSERT INTO tasks (title, text, status, owner_id)
-        VALUES(:title, :text, :status, :owner)';
+        $sql = '
+            INSERT INTO tasks (title, text, status, owner_id)
+            VALUES(:title, :text, :status, :owner)';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
@@ -142,11 +145,12 @@ class Tasks
     {
         $alias = self::COL_ALIAS;
         $userModel = new User();
-        $sql = "UPDATE tasks $alias SET
-            $alias.title =:title,
-            $alias.text = :text,
-            $alias.status =:status,
-            $alias.modified_by_id = :modified_id
+        $sql = "
+            UPDATE tasks $alias SET
+                $alias.title = :title,
+                $alias.text = :text,
+                $alias.status = :status,
+                $alias.modified_by_id = :modified_id
             WHERE $alias.id = :id";
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
