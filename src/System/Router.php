@@ -61,7 +61,7 @@ class Router
                     $controller = $controllerParts[0];
                     $controllerAction = $controllerParts[1];
                     $cont = new $controller();
-                    $cont->$controllerAction($matches);
+                    echo (string) $cont->$controllerAction($matches);
                     $route_match_found = true;
                     break;
                 }

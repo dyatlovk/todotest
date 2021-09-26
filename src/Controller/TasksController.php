@@ -6,14 +6,13 @@ namespace App\Controller;
 
 use App\Model\Tasks;
 use App\Sanitizer\TaskSanitize;
-use App\System\Templates;
 use App\Validator\TaskValidator;
 
 class TasksController extends BaseController
 {
     private const FORM_NAME = 'task';
 
-    public function add(): void
+    public function add(): string
     {
         $this->denyAnon();
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
@@ -23,7 +22,7 @@ class TasksController extends BaseController
         $taskModel = new Tasks();
         $statuses = $taskModel->getStatusesList(null);
 
-        echo (new Templates())->render('tasks/create.php', [
+        return $this->render('tasks/create.php', [
             'formName' => self::FORM_NAME,
             'formErrors' => $formErrors,
             'statuses' => $statuses,
@@ -31,7 +30,7 @@ class TasksController extends BaseController
         ]);
     }
 
-    public function edit(array $routerArgs): void
+    public function edit(array $routerArgs): string
     {
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
@@ -44,7 +43,8 @@ class TasksController extends BaseController
         $_SESSION[self::FORM_NAME]['errors'] = null;
         $currentStatusId = (int) $task['task_status'];
         $statuses = $taskModel->getStatusesList($currentStatusId);
-        echo (new Templates())->render('tasks/edit.php', [
+
+        return $this->render('tasks/edit.php', [
             'task' => $task,
             'statuses' => $statuses,
             'formName' => self::FORM_NAME,
@@ -52,7 +52,7 @@ class TasksController extends BaseController
         ]);
     }
 
-    public function show(array $routerArgs): void
+    public function show(array $routerArgs): string
     {
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
@@ -60,7 +60,8 @@ class TasksController extends BaseController
         if (empty($task)) {
             $this->createNotFound();
         }
-        echo (new Templates())->render('tasks/show.php', [
+
+        return $this->render('tasks/show.php', [
             'task' => $task,
         ]);
     }

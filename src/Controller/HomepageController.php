@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Tasks;
-use App\System\Templates;
 
-class HomepageController
+class HomepageController extends BaseController
 {
-    private const ITEMS_ON_PAGE = 4;
+    private const ITEMS_ON_PAGE = 10;
 
-    public function index(): void
+    public function index(): string
     {
         $page = (int) $_REQUEST['p'];
         if (1 == $page) {
@@ -21,7 +20,8 @@ class HomepageController
         $startFrom = ($page - 1) * self::ITEMS_ON_PAGE;
         $list = $taskModel->getAll($startFrom, self::ITEMS_ON_PAGE);
         $pages = $taskModel->pages(self::ITEMS_ON_PAGE);
-        echo (new Templates())->render('home/index.php', [
+
+        return $this->render('home/index.php', [
             'taskList' => $list,
             'pages' => $pages,
         ]);

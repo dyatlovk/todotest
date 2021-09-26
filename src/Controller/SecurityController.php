@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\User;
-use App\System\Templates;
 use App\Validator\UserValidator;
 
-class SecurityController
+class SecurityController extends BaseController
 {
     private const LOGIN_FORM_NAME = 'login';
 
-    public function login(): void
+    public function login(): string
     {
         $authError = $_SESSION['credentials_error'];
         $formErrors = $_SESSION[self::LOGIN_FORM_NAME]['errors'];
         $_SESSION['credentials_error'] = null;
         $_SESSION[self::LOGIN_FORM_NAME] = null;
-        echo (new Templates())->render('security/login.php', [
+
+        return $this->render('security/login.php', [
             'formName' => self::LOGIN_FORM_NAME,
             'authError' => $authError,
             'formErrors' => $formErrors,

@@ -106,30 +106,35 @@ class Tasks
 
     public function create(array $data): bool
     {
-        $sql = 'INSERT INTO tasks (title, text, status)
-        VALUES(:title, :text, :status)';
+        $userModel = new User();
+        $user = $userModel->loadFromSession();
+        $sql = 'INSERT INTO tasks (title, text, status, owner_id)
+        VALUES(:title, :text, :status, :owner)';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
         $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
+        $query->bindValue(':owner', (int) $user['user_id'], PDO::PARAM_INT);
 
         return $query->execute();
     }
 
     public function update(array $data, bool $asAdmin = false): bool
     {
-        $sql = 'UPDATE tasks t SET t.title =:title, t.text = :text, t.status =:status, modified_by_id = :modified_user_id WHERE t.id = :id';
+        $userModel = new User();
+        $user = $userModel->loadFromSession();
+        $sql = 'UPDATE tasks t SET t.title =:title, t.text = :text, t.status =:status, t.modified_by_id = :modified_id WHERE t.id = :id';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
         $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
         $query->bindValue(':id', $data['id'], PDO::PARAM_INT);
+        $query->bindValue(':modified_id', null, PDO::PARAM_NULL);
         if ($asAdmin) {
-            $userModel = new User();
             $adminuser = $userModel->findByEmail(User::ADMIN_EMAIL);
-            $query->bindValue(':modified_user_id', (int) $adminuser['user_id'], PDO::PARAM_INT);
+            $query->bindValue(':modified_id', (int) $adminuser['user_id'], PDO::PARAM_INT);
         }
 
         return $query->execute();

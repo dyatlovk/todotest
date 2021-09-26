@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\User;
+use App\System\Templates;
+use Exception;
 
 class BaseController
 {
@@ -13,8 +15,7 @@ class BaseController
         $userModel = new User();
         $user = $userModel->isLogged();
         if (false == $user) {
-            header('HTTP/1.0 403 Forbidden');
-            exit();
+            $this->createAccessDenied();
         }
     }
 
@@ -39,12 +40,14 @@ class BaseController
     public function createNotFound(): void
     {
         header('HTTP/1.0 404 Not Found');
+        echo $this->render('errors/404.php');
         exit();
     }
 
     public function createAccessDenied(): void
     {
         header('HTTP/1.0 403 Forbidden');
+        echo $this->render('errors/403.php');
         exit();
     }
 
@@ -64,5 +67,14 @@ class BaseController
         $userModel = new User();
 
         return $userModel->isAdmin();
+    }
+
+    public function render(?string $tpl, array $vars = []): string
+    {
+        if (is_null($tpl)) {
+            throw new Exception('Template not found');
+        }
+
+        return (new Templates())->render($tpl, $vars);
     }
 }
