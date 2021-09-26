@@ -108,8 +108,9 @@ class TasksController extends BaseController
         $formData = array_merge($formData, ['id' => $taskId]);
         $dataSanitizer = new TaskSanitize();
         $cleanedData = $dataSanitizer->prepare($formData)->getCleaned();
-        $asAdmin = $this->isUserAdmin();
-        $result = $taskModel->update($cleanedData, $asAdmin);
+
+        $modifiedById = $this->whoModified($task['task_text'], $formData['text'], $task['modified_admin']);
+        $result = $taskModel->update($cleanedData, $modifiedById);
         if (false == $result) {
             return;
         }

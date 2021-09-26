@@ -65,7 +65,8 @@ class Tasks
                 $alias.title as task_title,
                 $alias.text as task_text,
                 $alias.status as task_status,
-                $alias.owner_id as task_owner
+                $alias.owner_id as task_owner,
+                $alias.modified_by_id as modified_admin
             FROM tasks $alias
             WHERE $alias.id = :task_id";
 
@@ -141,28 +142,24 @@ class Tasks
         return $query->execute();
     }
 
-    public function update(array $data, bool $asAdmin = false): bool
+    public function update(array $data, ?int $modifyBy = null): bool
     {
         $alias = self::COL_ALIAS;
-        $userModel = new User();
         $sql = "
             UPDATE tasks $alias SET
                 $alias.title = :title,
                 $alias.text = :text,
                 $alias.status = :status,
                 $alias.modified_by_id = :modified_id
-            WHERE $alias.id = :id";
+            WHERE $alias.id = :id
+        ";
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
         $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
         $query->bindValue(':id', $data['id'], PDO::PARAM_INT);
-        $query->bindValue(':modified_id', null, PDO::PARAM_NULL);
-        if ($asAdmin) {
-            $adminuser = $userModel->findByEmail(User::ADMIN_EMAIL);
-            $query->bindValue(':modified_id', (int) $adminuser['user_id'], PDO::PARAM_INT);
-        }
+        $query->bindValue(':modified_id', $modifyBy);
 
         return $query->execute();
     }

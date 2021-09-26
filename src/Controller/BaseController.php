@@ -72,4 +72,37 @@ class BaseController
     {
         return (new Templates())->render($tpl, $vars);
     }
+
+    public function isEqual(?string $a, ?string $b): bool
+    {
+        if (is_null($a) && is_null($b)) {
+            return false;
+        }
+        $hashA = hash('sha256', $a);
+        $hashB = hash('sha256', $b);
+        if (false == $hashA) {
+            $hashA = '';
+        }
+
+        if (false == $hashB) {
+            $hashB = '';
+        }
+
+        return $hashA !== $hashB;
+    }
+
+    public function whoModified(string $oldText, string $newText, ?string $modified = null): ?int
+    {
+        $userModel = new User();
+        $adminuser = $userModel->findByEmail(User::ADMIN_EMAIL);
+        if (!is_null($modified)) {
+            $modified = (int) $modified;
+        }
+        $isTextModified = $this->isEqual($oldText, $newText);
+        if ($isTextModified && $this->isUserAdmin()) {
+            $modified = (int) $adminuser['user_id'];
+        }
+
+        return $modified;
+    }
 }
