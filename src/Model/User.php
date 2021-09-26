@@ -9,14 +9,23 @@ use PDO;
 
 class User
 {
+    public const COL_ALIAS = 'u_';
     public const ROLE_ADMIN = 1;
     public const ROLE_USER = null;
     public const ADMIN_EMAIL = 'admin@email.com';
 
     public function findByEmail(string $email): array
     {
+        $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = 'SELECT u.id as user_id, u.email as user_email, u.username as user_name, u.password as password, u.role as user_role FROM user u WHERE u.email = :email';
+        $sql = "SELECT
+            $alias.id as user_id,
+            $alias.email as user_email,
+            $alias.username as user_name,
+            $alias.password as password,
+            $alias.role as user_role
+            FROM user $alias
+            WHERE $alias.email = :email";
         $query = $conn->prepare($sql);
         $query->bindValue(':email', $email, PDO::PARAM_STR);
         $query->execute();

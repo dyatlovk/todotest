@@ -9,6 +9,10 @@ use PDO;
 
 class Tasks
 {
+    public const COL_ALIAS = 't_';
+    public const MAX_ITEMS = 10;
+    public const ORDER_FIELDS = ['username', 'email', 'status'];
+
     public const STATUS_OPEN = 1;
     public const STATUS_CLOSE = 2;
     public const STATUS_COMPLETE = 3;
@@ -17,24 +21,30 @@ class Tasks
         self::STATUS_COMPLETE => 'Completed',
         self::STATUS_OPEN => 'Open',
     ];
-    public const MAX_ITEMS = 10;
 
-    public function getAll(int $startFrom = 0, int $limit = self::MAX_ITEMS): array
+    public function getAll(int $start = 0, int $limit = self::MAX_ITEMS, string $orderExpr): array
     {
-        if (0 > $startFrom) {
-            $startFrom = 0;
-        }
+        $taskAlias = self::COL_ALIAS;
+        $userAlias = User::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = 'SELECT t.title as task_title, t.id as task_id,
-        t.text as task_text, t.status as task_status, t.modified_by_id as modified_by,
-        u.username as user_name, u.email as user_email FROM tasks t INNER JOIN user u ON u.id = t.owner_id
-        LIMIT :limit OFFSET :offset';
+        $sql = "SELECT
+            $taskAlias.title as task_title,
+            $taskAlias.id as task_id,
+            $taskAlias.text as task_text,
+            $taskAlias.status as task_status,
+            $taskAlias.modified_by_id as modified_by,
+            $userAlias.username as user_name,
+            $userAlias.email as user_email
+            FROM tasks $taskAlias
+            INNER JOIN user $userAlias ON $userAlias.id = $taskAlias.owner_id
+            ORDER BY $orderExpr
+            LIMIT :limit OFFSET :offset";
         $query = $conn->prepare($sql);
         if (false == $query) {
             return [];
         }
         $query->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $query->bindValue(':offset', $startFrom, PDO::PARAM_INT);
+        $query->bindValue(':offset', $start, PDO::PARAM_INT);
         $query->execute();
         $result = $query->fetchAll();
         if (false == $result) {
@@ -46,9 +56,16 @@ class Tasks
 
     public function findSingle(int $id): array
     {
+        $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = 'SELECT t.id as task_id, t.title as task_title, t.text as task_text,
-        t.status as task_status, t.owner_id as task_owner FROM tasks t WHERE t.id = :task_id';
+        $sql = "SELECT
+            $alias.id as task_id,
+            $alias.title as task_title,
+            $alias.text as task_text,
+            $alias.status as task_status,
+            $alias.owner_id as task_owner
+            FROM tasks $alias
+            WHERE $alias.id = :task_id";
 
         $query = $conn->prepare($sql);
         if (false == $query) {
@@ -77,8 +94,9 @@ class Tasks
 
     public function findMaxItems(): ?int
     {
+        $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
-        $sql = 'SELECT COUNT(t.id) as count FROM tasks t';
+        $sql = "SELECT COUNT($alias.id) as count FROM tasks $alias";
         $query = $conn->query($sql)->fetch();
 
         if (isset($query['count'])) {
@@ -122,9 +140,14 @@ class Tasks
 
     public function update(array $data, bool $asAdmin = false): bool
     {
+        $alias = self::COL_ALIAS;
         $userModel = new User();
-        $user = $userModel->loadFromSession();
-        $sql = 'UPDATE tasks t SET t.title =:title, t.text = :text, t.status =:status, t.modified_by_id = :modified_id WHERE t.id = :id';
+        $sql = "UPDATE tasks $alias SET
+            $alias.title =:title,
+            $alias.text = :text,
+            $alias.status =:status,
+            $alias.modified_by_id = :modified_id
+            WHERE $alias.id = :id";
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);

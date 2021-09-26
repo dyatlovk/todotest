@@ -10,10 +10,10 @@ $this->start(); ?>Home<?php $this->end('title'); ?>
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">User</th>
-                <th scope="col">Email</th>
+                <th scope="col"><a href="/<?php echo $orderQuery['username']; ?>">User</a></th>
+                <th scope="col"><a href="/<?php echo $orderQuery['email']; ?>">Email</a></th>
                 <th scope="col">Text</th>
-                <th scope="col">Status</th>
+                <th scope="col"><a href="/<?php echo $orderQuery['status']; ?>">Status</a></th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -38,9 +38,9 @@ $this->start(); ?>Home<?php $this->end('title'); ?>
 <div class="container-fluid">
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-        <?php for($i = 1; $i <= $pages; ++$i): ?>
-            <li class="page-item"><a class="page-link" href="/?p=<?php echo $i?>"><?php echo $i ?></a></li>
-        <?php endfor; ?>
+        <?php foreach($pageQuery as $key => $link): ?>
+            <li class="page-item"><a class="page-link" href="/<?php echo $link; ?>"><?php echo $key; ?></a></li>
+        <?php endforeach; ?>
       </ul>
     </nav>
 </div>
