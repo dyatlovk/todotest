@@ -18,7 +18,7 @@ class BaseController
         }
     }
 
-    public function allowOwnerOrAdmin(array $task = []): void
+    public function accessOwnerOrAdmin(array $task = []): void
     {
         $userModel = new User();
         $isAnon = !$userModel->isLogged();

@@ -38,7 +38,7 @@ class TasksController extends BaseController
         if (empty($task)) {
             $this->createNotFound();
         }
-        $this->allowOwnerOrAdmin($task);
+        $this->accessOwnerOrAdmin($task);
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
         $currentStatusId = (int) $task['task_status'];
@@ -95,7 +95,7 @@ class TasksController extends BaseController
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
-        $this->allowOwnerOrAdmin($task);
+        $this->accessOwnerOrAdmin($task);
         $formData = $_POST[self::FORM_NAME];
         $formValidator = new TaskValidator();
         $formValidator->validateData($formData);
@@ -126,7 +126,7 @@ class TasksController extends BaseController
         if (empty($task)) {
             $this->createNotFound();
         }
-        $this->allowOwnerOrAdmin($task);
+        $this->accessOwnerOrAdmin($task);
         $result = $taskModel->delete($taskId);
         if (false == $result) {
             return;
