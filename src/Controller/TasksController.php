@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Tasks;
+use App\Notify;
 use App\Sanitizer\TaskSanitize;
 use App\Validator\TaskValidator;
 
@@ -86,6 +87,7 @@ class TasksController extends BaseController
         if (false == $result) {
             return;
         }
+        Notify::send('New task added');
 
         header('Location: /');
     }
@@ -115,6 +117,8 @@ class TasksController extends BaseController
             return;
         }
 
+        Notify::send('Task updated');
+
         header('Location: /');
     }
 
@@ -131,6 +135,7 @@ class TasksController extends BaseController
         if (false == $result) {
             return;
         }
+        Notify::send('Task deleted');
 
         header('Location: /');
     }
