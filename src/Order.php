@@ -25,7 +25,7 @@ class Order
     {
         $userAlias = User::COL_ALIAS;
         $taskAlias = Tasks::COL_ALIAS;
-        $orderExpr = "$userAlias.username ASC";
+        $orderExpr = "$taskAlias.id DESC";
         if (!in_array($this->fieldValue, Tasks::ORDER_FIELDS)) {
             return $orderExpr;
         }
