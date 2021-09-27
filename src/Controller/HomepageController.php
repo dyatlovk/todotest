@@ -14,9 +14,9 @@ class HomepageController extends BaseController
 
     public function index(): string
     {
-        $taskModel = new Tasks();
-        $order = new Order('sort', 'dir');
+        $order = new Order('sort', 'dir', $_REQUEST);
         $pages = new Pages('p', $_REQUEST, self::ITEMS_ON_PAGE);
+        $taskModel = new Tasks();
         $tasksStartAt = $pages->findBounding()->start;
         $tasksLimit = $pages->findBounding()->end;
         $tasksOrderExpr = $order->prepareSql();

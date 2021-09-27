@@ -13,11 +13,17 @@ class Order
     private string $keyField;
     private string $fieldValue;
     private string $dirValue;
+    /** @var array<string,mixed> */
+    private array $request;
 
-    public function __construct(string $fieldKey = 'sort', string $dirKey = 'dir')
+    /**
+     * @param array<string,mixed> $request
+     */
+    public function __construct(string $fieldKey = 'sort', string $dirKey = 'dir', array $request)
     {
         $this->keyDir = $dirKey;
         $this->keyField = $fieldKey;
+        $this->request = $request;
         $this->valuesFromGlobal();
     }
 
@@ -48,12 +54,11 @@ class Order
     public function buildQuery(): array
     {
         $dir = $this->toggleDirection();
-        $request = $_REQUEST;
-        unset($request[$this->keyDir]);
-        unset($request[$this->keyField]);
+        unset($this->request[$this->keyDir]);
+        unset($this->request[$this->keyField]);
         $prevQuery = '';
-        if (false == empty($request)) {
-            $prevQuery = '&' . http_build_query($request);
+        if (false == empty($this->request)) {
+            $prevQuery = '&' . http_build_query($this->request);
         }
         $dirQuery = '&' . $this->keyDir . '=' . $dir;
 
@@ -76,7 +81,7 @@ class Order
 
     private function valuesFromGlobal(): void
     {
-        $this->fieldValue = (string) $_REQUEST[$this->keyField];
-        $this->dirValue = (string) $_REQUEST[$this->keyDir];
+        $this->fieldValue = (string) $this->request[$this->keyField];
+        $this->dirValue = (string) $this->request[$this->keyDir];
     }
 }
