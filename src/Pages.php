@@ -8,20 +8,26 @@ use App\Model\Tasks;
 
 class Pages
 {
-    private const MAX = 10;
+    private const MAX_ON_PAGE = 10;
 
     private string $key;
     private int $max;
     private int $current;
+    /** @var array<string,mixed> */
+    private array $request;
 
     public int $start;
     public int $end;
 
-    public function __construct(string $key = 'p', int $current, int $max = self::MAX)
+    /**
+     * @param array<string,mixed> $request
+     */
+    public function __construct(string $queryKey = 'p', array $request, int $max = self::MAX_ON_PAGE)
     {
-        $this->key = $key;
+        $this->key = $queryKey;
         $this->max = $max;
-        $this->current = $current;
+        $this->request = $request;
+        $this->current = (int) $request[$queryKey];
     }
 
     public function findBounding(): self
@@ -44,11 +50,10 @@ class Pages
     {
         $taskModel = new Tasks();
         $pages = $taskModel->pages($this->max);
-        $request = $_REQUEST;
-        unset($request[$this->key]);
+        unset($this->request[$this->key]);
         $prevQuery = '';
         if (false == empty($request)) {
-            $prevQuery = '?' . http_build_query($request);
+            $prevQuery = '?' . http_build_query($this->request);
         }
         $prefix = '&';
         if (empty($request)) {
