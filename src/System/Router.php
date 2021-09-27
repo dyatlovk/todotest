@@ -11,8 +11,9 @@ class Router
     public const POST = 'POST';
     public const DELETE = 'DELETE';
 
-    private static $pathNotFound = null;
-    private static $methodNotAllowed = null;
+    private static ?string $pathNotFound = null;
+    private static ?string $methodNotAllowed = null;
+    /** @var array<string> */
     private static array $routes = [];
 
     public static function add(string $uri, string $method = self::GET, string $controller): void
@@ -24,12 +25,12 @@ class Router
         ]);
     }
 
-    public static function pathNotFound($function): void
+    public static function pathNotFound(string $function): void
     {
         self::$pathNotFound = $function;
     }
 
-    public static function methodNotAllowed($function): void
+    public static function methodNotAllowed(string $function): void
     {
         self::$methodNotAllowed = $function;
     }
@@ -51,9 +52,9 @@ class Router
             $route['expression'] = $route['expression'] . '$';
             if (preg_match('#' . $route['expression'] . '#', $path, $matches)) {
                 $path_match_found = true;
-                if (strtolower($method) == strtolower($route['method'])) {
+                if (strtolower($method) === strtolower($route['method'])) {
                     array_shift($matches);
-                    if ('' != $basepath && '/' != $basepath) {
+                    if ('' !== $basepath && '/' !== $basepath) {
                         array_shift($matches);
                     }
                     $controllerName = $route['controller'];

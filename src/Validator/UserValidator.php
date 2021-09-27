@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-class UserValidator implements ValidatorInterface
+class UserValidator
 {
+    /** @var array<string, array<string>> */
     private ?array $errors = null;
 
+    /**
+     * @param array<string> $data
+     */
     public function validateData(array $data): void
     {
         if (empty($data['email'])) {
@@ -18,6 +22,9 @@ class UserValidator implements ValidatorInterface
         }
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function getErrors(): ?array
     {
         return $this->errors;

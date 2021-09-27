@@ -18,6 +18,9 @@ class BaseController
         }
     }
 
+    /**
+     * @param array<string|int> $task
+     */
     public function accessOwnerOrAdmin(array $task = []): void
     {
         $userModel = new User();
@@ -50,6 +53,9 @@ class BaseController
         exit();
     }
 
+    /**
+     * @return array<string|int>
+     */
     public function getUser(): array
     {
         $userModel = new User();
@@ -68,6 +74,9 @@ class BaseController
         return $userModel->isAdmin();
     }
 
+    /**
+     * @param array<string, mixed> $vars
+     */
     public function render(?string $tpl, array $vars = []): string
     {
         return (new Templates())->render($tpl, $vars);

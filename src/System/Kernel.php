@@ -8,6 +8,7 @@ class Kernel
 {
     public const NAME = 'kernel';
 
+    /** @var array<string> */
     private array $db;
 
     public function boot(): void

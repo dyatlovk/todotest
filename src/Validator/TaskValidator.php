@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-class TaskValidator implements ValidatorInterface
+class TaskValidator
 {
+    /** @var array<string, array<string>> */
     private ?array $errors = null;
 
+    /**
+     * @param array<string, array<string|int>> $data
+     */
     public function validateData(array $data): void
     {
         if (empty($data)) {
@@ -24,6 +28,9 @@ class TaskValidator implements ValidatorInterface
         }
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function getErrors(): ?array
     {
         return $this->errors;

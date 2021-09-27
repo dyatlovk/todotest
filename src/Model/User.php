@@ -14,6 +14,9 @@ class User
     public const ROLE_USER = null;
     public const ADMIN_EMAIL = 'admin@email.com';
 
+    /**
+     * @return array<string|int>
+     */
     public function findByEmail(string $email): array
     {
         $alias = self::COL_ALIAS;
@@ -38,6 +41,9 @@ class User
         return $result;
     }
 
+    /**
+     * @param array<string> $formData
+     */
     public function authenticate(array $formData): bool
     {
         $password = $formData['password'];
@@ -55,6 +61,9 @@ class User
         return false;
     }
 
+    /**
+     * @param array<string|int> $userData
+     */
     public function saveToSession(array $userData = []): bool
     {
         if (empty($userData)) {
@@ -65,6 +74,9 @@ class User
         return true;
     }
 
+    /**
+     * @return array<string>|null $userData
+     */
     public function loadFromSession(): ?array
     {
         if (isset($_SESSION['user'])) {
@@ -74,11 +86,17 @@ class User
         return null;
     }
 
+    /**
+     * @param array<string|int> $userData
+     */
     public function serialize(array $userData = []): string
     {
         return serialize($userData);
     }
 
+    /**
+     * @return array<string> $userData
+     */
     public function unserialize(string $userData): array
     {
         $data = unserialize($userData);

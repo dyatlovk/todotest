@@ -22,6 +22,9 @@ class Tasks
         self::STATUS_OPEN => 'Open',
     ];
 
+    /**
+     * @return array<string|mixed>
+     */
     public function getAll(int $start = 0, int $limit = self::MAX_ITEMS, string $orderExpr): array
     {
         $taskAlias = self::COL_ALIAS;
@@ -55,6 +58,9 @@ class Tasks
         return $result;
     }
 
+    /**
+     * @return array<string|mixed>
+     */
     public function findSingle(int $id): array
     {
         $alias = self::COL_ALIAS;
@@ -100,15 +106,22 @@ class Tasks
         $alias = self::COL_ALIAS;
         $conn = $this->getConnection();
         $sql = "SELECT COUNT($alias.id) as count FROM tasks $alias";
-        $query = $conn->query($sql)->fetch();
+        $query = $conn->query($sql);
+        if (false == $query) {
+            return null;
+        }
+        $result = $query->fetch();
 
-        if (isset($query['count'])) {
-            return (int) $query['count'];
+        if (isset($result['count'])) {
+            return (int) $result['count'];
         }
 
         return null;
     }
 
+    /**
+     * @return array<int, array<string|bool|int>>
+     */
     public function getStatusesList(?int $actual): array
     {
         $map = self::STATUSES;
@@ -125,6 +138,9 @@ class Tasks
         return $result;
     }
 
+    /**
+     * @param array<string|int> $data
+     */
     public function create(array $data): bool
     {
         $userModel = new User();
@@ -142,6 +158,9 @@ class Tasks
         return $query->execute();
     }
 
+    /**
+     * @param array<string|int> $data
+     */
     public function update(array $data, ?int $modifyBy = null): bool
     {
         $alias = self::COL_ALIAS;

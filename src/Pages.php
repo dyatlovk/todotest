@@ -17,7 +17,7 @@ class Pages
     public int $start;
     public int $end;
 
-    public function __construct(string $key = 'p', int $current, $max = self::MAX)
+    public function __construct(string $key = 'p', int $current, int $max = self::MAX)
     {
         $this->key = $key;
         $this->max = $max;
@@ -37,6 +37,9 @@ class Pages
         return $this;
     }
 
+    /**
+     * @return array<string>
+     */
     public function buildQuery(): array
     {
         $taskModel = new Tasks();

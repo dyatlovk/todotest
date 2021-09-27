@@ -42,6 +42,9 @@ class Order
         return $orderExpr;
     }
 
+    /**
+     * @return array<string>
+     */
     public function buildQuery(): array
     {
         $dir = $this->toggleDirection();

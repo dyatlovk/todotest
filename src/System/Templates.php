@@ -10,6 +10,7 @@ class Templates
 {
     private const PATH = 'templates/';
 
+    /** @var array<string|false> */
     public array $blocks;
 
     public function extend(?string $path): void
@@ -23,7 +24,7 @@ class Templates
         echo $this->render($path);
     }
 
-    public function start()
+    public function start(): void
     {
         ob_start();
     }
@@ -35,18 +36,21 @@ class Templates
         if (!isset($this->blocks[$name])) {
             $this->blocks[$name] = $buffer;
         }
-        echo $this->blocks[$name];
+        echo (string) $this->blocks[$name];
     }
 
-    public function block(string $name): ?string
+    public function block(string $name): string
     {
         if (isset($this->blocks[$name])) {
-            return $this->blocks[$name];
+            return (string) $this->blocks[$name];
         }
 
-        return null;
+        return '';
     }
 
+    /**
+     * @param array<mixed> $args
+     */
     public function render(?string $file, array $args = []): string
     {
         if (is_null($file)) {

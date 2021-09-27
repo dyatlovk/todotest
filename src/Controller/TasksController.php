@@ -31,6 +31,9 @@ class TasksController extends BaseController
         ]);
     }
 
+    /**
+     * @param array<sting|mixed> $routerArgs
+     */
     public function edit(array $routerArgs): string
     {
         $taskId = (int) $routerArgs[0];
@@ -53,6 +56,9 @@ class TasksController extends BaseController
         ]);
     }
 
+    /**
+     * @param array<sting|mixed> $routerArgs
+     */
     public function show(array $routerArgs): string
     {
         $taskId = (int) $routerArgs[0];
@@ -92,6 +98,9 @@ class TasksController extends BaseController
         header('Location: /');
     }
 
+    /**
+     * @param array<sting|mixed> $routerArgs
+     */
     public function update(array $routerArgs): void
     {
         $taskId = (int) $routerArgs[0];
@@ -111,7 +120,7 @@ class TasksController extends BaseController
         $dataSanitizer = new TaskSanitize();
         $cleanedData = $dataSanitizer->prepare($formData)->getCleaned();
 
-        $modifiedById = $this->whoModified($task['task_text'], $formData['text'], $task['modified_admin']);
+        $modifiedById = $this->whoModified((string) $task['task_text'], $formData['text'], $task['modified_admin']);
         $result = $taskModel->update($cleanedData, $modifiedById);
         if (false == $result) {
             return;
@@ -122,6 +131,9 @@ class TasksController extends BaseController
         header('Location: /');
     }
 
+    /**
+     * @param array<sting|mixed> $routerArgs
+     */
     public function delete(array $routerArgs): void
     {
         $taskId = (int) $routerArgs[0];

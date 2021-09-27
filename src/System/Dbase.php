@@ -9,8 +9,14 @@ use PDOException;
 
 class Dbase
 {
+    /**
+     * @var array<string>
+     */
     private array $connParams;
 
+    /**
+     * @param array<string> $connParams
+     */
     public function __construct(array $connParams)
     {
         $this->connParams = $connParams;
@@ -25,14 +31,19 @@ class Dbase
                 'dbname' => $this->connParams['dbname'],
             ]);
             $pdo = new PDO($dsn, $this->connParams['user'], $this->connParams['pass']);
+
+            return $pdo;
         } catch (PDOException $e) {
             echo 'Server error';
         }
 
-        return $pdo;
+        throw new PDOException();
     }
 
-    protected function constructPdoDsn(array $params)
+    /**
+     * @param array<string> $params
+     */
+    protected function constructPdoDsn(array $params): string
     {
         $dsn = 'mysql:';
         if (isset($params['host']) && '' !== $params['host']) {

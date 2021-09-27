@@ -6,8 +6,14 @@ namespace App\Sanitizer;
 
 class TaskSanitize
 {
+    /**
+     * @var array<string|mixed>
+     */
     public array $cleanedData;
 
+    /**
+     * @param array<string|mixed> $formData
+     */
     public function prepare(array $formData): self
     {
         if (isset($formData['title'])) {
@@ -26,6 +32,9 @@ class TaskSanitize
         return $this;
     }
 
+    /**
+     * @return array<string|mixed>
+     */
     public function getCleaned(): array
     {
         return $this->cleanedData;
