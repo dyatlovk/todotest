@@ -6,6 +6,7 @@ namespace App\System;
 
 class Kernel
 {
+    public const SESSION_TTL = 3600 * 24;
     public const NAME = 'kernel';
 
     /** @var array<string> */
@@ -14,7 +15,7 @@ class Kernel
     public function boot(): void
     {
         $this->startSession();
-        $this->loadConfig();
+        $this->loadDbConfig();
         $this->loadRouters();
     }
 
@@ -39,7 +40,7 @@ class Kernel
         return $app;
     }
 
-    private function loadConfig(): void
+    private function loadDbConfig(): void
     {
         $root = self::getRootDir();
         $db = require_once $root . '/config/dbase.php';
@@ -54,7 +55,7 @@ class Kernel
 
     private function startSession(): void
     {
-        session_set_cookie_params(3600 * 24);
+        session_set_cookie_params(self::SESSION_TTL, '/', '', true, true);
         session_start();
     }
 }
