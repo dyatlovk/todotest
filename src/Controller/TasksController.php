@@ -56,23 +56,6 @@ class TasksController extends BaseController
         ]);
     }
 
-    /**
-     * @param array<sting|mixed> $routerArgs
-     */
-    public function show(array $routerArgs): string
-    {
-        $taskId = (int) $routerArgs[0];
-        $taskModel = new Tasks();
-        $task = $taskModel->findSingle($taskId);
-        if (empty($task)) {
-            $this->createNotFound();
-        }
-
-        return $this->render('tasks/show.php', [
-            'task' => $task,
-        ]);
-    }
-
     public function create(): void
     {
         $this->denyAnon();
