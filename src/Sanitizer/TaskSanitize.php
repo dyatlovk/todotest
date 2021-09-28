@@ -23,7 +23,8 @@ class TaskSanitize
             $sanitized_email = filter_var($formData['email'], FILTER_SANITIZE_EMAIL);
             if ($sanitized_email) {
                 $this->cleanedData['email'] = htmlspecialchars($sanitized_email);
-            } else {
+            }
+            if(false == $sanitized_email) {
                 $this->cleanedData['email'] = htmlspecialchars($formData['email']);
             }
         }
