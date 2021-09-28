@@ -14,8 +14,8 @@ class UserValidator
      */
     public function validateData(array $data): void
     {
-        if (empty($data['email'])) {
-            $this->errors['children']['email'] = 'Empty email does not allow';
+        if (empty($data['username'])) {
+            $this->errors['children']['username'] = 'Empty name does not allow';
         }
         if (empty($data['password'])) {
             $this->errors['children']['password'] = 'Empty password does not allow';

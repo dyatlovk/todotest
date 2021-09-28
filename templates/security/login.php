@@ -4,14 +4,14 @@
 <?php $this->start(); ?>
 <div class="form-signin">
     <form name="<?php echo $formName; ?>" method="POST" action="/login/check">
-        <?php $emailErrorText = (isset($formErrors['children']['email'])) ? $formErrors['children']['email']: null ?>
+        <?php $userErrorText = (isset($formErrors['children']['username'])) ? $formErrors['children']['username']: null ?>
         <?php $passwordErrorText = (isset($formErrors['children']['password'])) ? $formErrors['children']['password']: null ?>
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
-        <input name="<?php echo $formName; ?>[email]" type="email" class="form-control <?php echo (!is_null($emailErrorText)) ? 'is-invalid':'' ?>" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
-            <div class="invalid-feedback"><?php echo $emailErrorText ;?></div>
+        <input name="<?php echo $formName; ?>[username]" type="text" class="form-control <?php echo (!is_null($userErrorText)) ? 'is-invalid':'' ?>" id="floatingInput" placeholder="username">
+            <label for="floatingInput">Name</label>
+            <div class="invalid-feedback"><?php echo $userErrorText ;?></div>
         </div>
         <div class="form-floating">
             <input name="<?php echo $formName;?>[password]" type="password" class="form-control <?php echo (!is_null($passwordErrorText)) ? 'is-invalid':'' ?>" id="floatingPassword" placeholder="Password">

@@ -42,13 +42,40 @@ class User
     }
 
     /**
+     * @return array<string|int>
+     */
+    public function findByName(string $name): array
+    {
+        $alias = self::COL_ALIAS;
+        $conn = $this->getConnection();
+        $sql = "
+            SELECT
+                $alias.id as user_id,
+                $alias.email as user_email,
+                $alias.username as user_name,
+                $alias.password as password,
+                $alias.role as user_role
+            FROM user $alias
+            WHERE $alias.username = :username";
+        $query = $conn->prepare($sql);
+        $query->bindValue(':username', $name, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch();
+        if (false == $result) {
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array<string> $formData
      */
     public function authenticate(array $formData): bool
     {
         $password = $formData['password'];
-        $email = $formData['email'];
-        $user = $this->findByEmail($email);
+        $username = $formData['username'];
+        $user = $this->findByName($username);
         if (false == $user) {
             return false;
         }
