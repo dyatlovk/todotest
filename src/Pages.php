@@ -16,8 +16,8 @@ class Pages
     /** @var array<string,mixed> */
     private array $request;
 
-    public int $start;
-    public int $end;
+    public int $start = 0;
+    public int $end = 0;
 
     /**
      * @param array<string,mixed> $request

@@ -9,7 +9,7 @@ class TaskSanitize
     /**
      * @var array<string|mixed>
      */
-    public array $cleanedData;
+    public array $cleanedData = [];
 
     /**
      * @param array<string|mixed> $formData

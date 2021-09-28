@@ -11,7 +11,7 @@ class Templates
     private const PATH = 'templates/';
 
     /** @var array<string|false> */
-    public array $blocks;
+    public array $blocks = [];
 
     public function extend(?string $path): void
     {

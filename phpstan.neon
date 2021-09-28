@@ -1,2 +1,4 @@
 parameters:
   level: 7
+  checkUninitializedProperties: true
+  checkTooWideReturnTypesInProtectedAndPublicMethods: true
