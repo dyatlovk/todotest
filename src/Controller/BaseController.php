@@ -48,8 +48,7 @@ class BaseController
 
     public function createAccessDenied(): void
     {
-        header('HTTP/1.0 403 Forbidden');
-        echo $this->render('errors/403.php');
+        header('Location: /login');
         exit();
     }
 

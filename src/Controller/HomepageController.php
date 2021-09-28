@@ -10,7 +10,7 @@ use App\Pages;
 
 class HomepageController extends BaseController
 {
-    private const ITEMS_ON_PAGE = 4;
+    private const ITEMS_ON_PAGE = 13;
 
     public function index(): string
     {

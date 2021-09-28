@@ -16,6 +16,7 @@ class Tasks
     public const STATUS_OPEN = 1;
     public const STATUS_CLOSE = 2;
     public const STATUS_COMPLETE = 3;
+    public const STATUS_DEFAULT = self::STATUS_OPEN;
     public const STATUSES = [
         self::STATUS_CLOSE => 'Closed',
         self::STATUS_COMPLETE => 'Completed',
@@ -153,8 +154,9 @@ class Tasks
             VALUES(:text, :status, :owner)';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
+        $status = (isset($data['status'])) ? (int) $data['status'] : self::STATUS_DEFAULT;
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
-        $query->bindValue(':status', (int) $data['status'], PDO::PARAM_INT);
+        $query->bindValue(':status', $status, PDO::PARAM_INT);
         $query->bindValue(':owner', (int) $user['user_id'], PDO::PARAM_INT);
 
         return $query->execute();

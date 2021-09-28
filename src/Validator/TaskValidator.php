@@ -29,9 +29,6 @@ class TaskValidator
         if (empty($data['username'])) {
             $this->errors['children']['username'] = 'Empty username does not allow';
         }
-        if (empty($data['status'])) {
-            $this->errors['children']['status'] = 'Empty status does not allow';
-        }
     }
 
     /**

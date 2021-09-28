@@ -5,7 +5,6 @@
         <?php $usernameErrorText = (isset($formErrors['children']['username'])) ? $formErrors['children']['username']: null ?>
         <?php $emailErrorText = (isset($formErrors['children']['email'])) ? $formErrors['children']['email']: null ?>
         <?php $textErrorText = (isset($formErrors['children']['text'])) ? $formErrors['children']['text']: null ?>
-        <?php $statusErrorText = (isset($formErrors['children']['status'])) ? $formErrors['children']['status']: null ?>
         <div class="row md-3">
             <div class="col-md-4">
                 <label for="username" class="form-label">Username</label>
@@ -26,15 +25,6 @@
                 <textarea name="task[text]" class="form-control <?php echo (!is_null($textErrorText)) ? 'is-invalid':'' ?>" id="text" rows="8"></textarea>
                 <div class="invalid-feedback"><?php echo $textErrorText ;?></div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <label for="inputState" class="form-label">State</label>
-                <select name="task[status]" id="inputState" class="form-select <?php echo (!is_null($statusErrorText)) ? 'is-invalid':'' ?>">
-                    <?php foreach ($statuses as $status) : ?>
-                        <option <?php echo ($status['isSelected']) ? 'selected' : ''; ?> value="<?php echo $status['value']; ?>"><?php echo $status['name']; ?></option>
-                    <?php endforeach; ?>
-            </select>
-            <div class="invalid-feedback"><?php echo $statusErrorText ;?></div>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Submit</button>
