@@ -32,7 +32,6 @@ class Tasks
         $conn = $this->getConnection();
         $sql = "
             SELECT
-                $taskAlias.title as task_title,
                 $taskAlias.id as task_id,
                 $taskAlias.text as task_text,
                 $taskAlias.status as task_status,
@@ -64,16 +63,20 @@ class Tasks
     public function findSingle(int $id): array
     {
         $alias = self::COL_ALIAS;
+        $userAlias = User::COL_ALIAS;
         $conn = $this->getConnection();
         $sql = "
             SELECT
                 $alias.id as task_id,
-                $alias.title as task_title,
                 $alias.text as task_text,
                 $alias.status as task_status,
                 $alias.owner_id as task_owner,
-                $alias.modified_by_id as modified_admin
+                $alias.modified_by_id as modified_admin,
+                $userAlias.id as user_id,
+                $userAlias.email as email,
+                $userAlias.username as username
             FROM tasks $alias
+            INNER JOIN user $userAlias ON $userAlias.id = $alias.owner_id
             WHERE $alias.id = :task_id";
 
         $query = $conn->prepare($sql);
@@ -139,20 +142,19 @@ class Tasks
     }
 
     /**
-     * @param array<string|int> $data
+     * @param array<string, mixed> $data
      */
     public function create(array $data): bool
     {
         $userModel = new User();
-        $user = $userModel->loadFromSession();
+        $user = $userModel->createIfNotExist($data['username'], $data['email']);
         $sql = '
-            INSERT INTO tasks (title, text, status, owner_id)
-            VALUES(:title, :text, :status, :owner)';
+            INSERT INTO tasks (text, status, owner_id)
+            VALUES(:text, :status, :owner)';
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
-        $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
-        $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
+        $query->bindValue(':status', (int) $data['status'], PDO::PARAM_INT);
         $query->bindValue(':owner', (int) $user['user_id'], PDO::PARAM_INT);
 
         return $query->execute();
@@ -166,7 +168,6 @@ class Tasks
         $alias = self::COL_ALIAS;
         $sql = "
             UPDATE tasks $alias SET
-                $alias.title = :title,
                 $alias.text = :text,
                 $alias.status = :status,
                 $alias.modified_by_id = :modified_id
@@ -174,7 +175,6 @@ class Tasks
         ";
         $conn = $this->getConnection();
         $query = $conn->prepare($sql);
-        $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':text', $data['text'], PDO::PARAM_STR);
         $query->bindValue(':status', $data['status'], PDO::PARAM_INT);
         $query->bindValue(':id', $data['id'], PDO::PARAM_INT);

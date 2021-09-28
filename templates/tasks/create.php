@@ -2,14 +2,22 @@
 <?php $this->start(); ?>
 <div class="container">
     <form name="<?php echo $formName ?>" class="row g-3" action="/task/create" method="POST">
-        <?php $titleErrorText = (isset($formErrors['children']['title'])) ? $formErrors['children']['title']: null ?>
+        <?php $usernameErrorText = (isset($formErrors['children']['username'])) ? $formErrors['children']['username']: null ?>
+        <?php $emailErrorText = (isset($formErrors['children']['email'])) ? $formErrors['children']['email']: null ?>
         <?php $textErrorText = (isset($formErrors['children']['text'])) ? $formErrors['children']['text']: null ?>
         <?php $statusErrorText = (isset($formErrors['children']['status'])) ? $formErrors['children']['status']: null ?>
         <div class="row md-3">
             <div class="col-md-4">
-                <label for="title" class="form-label">Title</label>
-                <input name="task[title]" type="text" class="form-control <?php echo (!is_null($titleErrorText)) ? 'is-invalid':'' ?>" id="title" value="<?php echo $formData['title'];?>">
-                <div class="invalid-feedback"><?php echo $titleErrorText ;?></div>
+                <label for="username" class="form-label">Username</label>
+                <input name="task[username]" type="text" class="form-control <?php echo (!is_null($usernameErrorText)) ? 'is-invalid':'' ?>" id="username" value="<?php echo $usernameData['username'];?>">
+                <div class="invalid-feedback"><?php echo $usernameErrorText ;?></div>
+            </div>
+        </div>
+        <div class="row md-3">
+            <div class="col-md-4">
+                <label for="email" class="form-label">Email</label>
+                <input name="task[email]" type="text" class="form-control <?php echo (!is_null($emailErrorText)) ? 'is-invalid':'' ?>" id="email" value="<?php echo $emailData['email'];?>">
+                <div class="invalid-feedback"><?php echo $emailErrorText ;?></div>
             </div>
         </div>
         <div class="row md-3">

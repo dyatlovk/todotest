@@ -21,7 +21,8 @@ main {
     align-content: center;
 }
 
-.form-signin {
+.form-signin,
+.content-center {
     width: 100%;
     max-width: 330px;
     padding: 15px;

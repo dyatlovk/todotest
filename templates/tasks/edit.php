@@ -3,16 +3,13 @@
 <?php $this->start(); ?>
 <div class="container-fluid">
 <form name="<?php echo $formName ?>" class="row g-3" action="/task/<?php echo $task['task_id']?>/update" method="POST">
+        <?php $usernameErrorText = (isset($formErrors['children']['username'])) ? $formErrors['children']['username']: null ?>
+        <?php $emailErrorText = (isset($formErrors['children']['email'])) ? $formErrors['children']['email']: null ?>
         <?php $titleErrorText = (isset($formErrors['children']['title'])) ? $formErrors['children']['title']: null ?>
         <?php $textErrorText = (isset($formErrors['children']['text'])) ? $formErrors['children']['text']: null ?>
         <?php $statusErrorText = (isset($formErrors['children']['status'])) ? $formErrors['children']['status']: null ?>
-        <div class="row md-3">
-            <div class="col-md-4">
-                <label for="title" class="form-label">Title</label>
-                <input name="task[title]" type="text" class="form-control <?php echo (!is_null($titleErrorText)) ? 'is-invalid':'' ?>" id="title" value="<?php echo $task['task_title']; ?>">
-                <div class="invalid-feedback"><?php echo $titleErrorText ;?></div>
-            </div>
-        </div>
+        <input name="task[username]" type="hidden" class="form-control <?php echo (!is_null($usernameErrorText)) ? 'is-invalid':'' ?>" id="username" value="<?php echo $task['username'];?>">
+        <input name="task[email]" type="hidden" class="form-control <?php echo (!is_null($emailErrorText)) ? 'is-invalid':'' ?>" id="email" value="<?php echo $task['email'];?>">
         <div class="row md-3">
             <div class="col-md-8">
                 <label for="text" class="form-label">Text</label>

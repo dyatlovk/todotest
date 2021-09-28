@@ -17,11 +17,17 @@ class TaskValidator
         if (empty($data)) {
             $this->errors['form'] = 'Empty data does not allow';
         }
-        if (empty($data['title'])) {
-            $this->errors['children']['title'] = 'Empty title does not allow';
-        }
         if (empty($data['text'])) {
             $this->errors['children']['text'] = 'Empty text does not allow';
+        }
+        if (empty($data['email'])) {
+            $this->errors['children']['email'] = 'Empty email does not allow';
+        }
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->errors['children']['email'] = 'Email address is invalid.';
+        }
+        if (empty($data['username'])) {
+            $this->errors['children']['username'] = 'Empty username does not allow';
         }
         if (empty($data['status'])) {
             $this->errors['children']['status'] = 'Empty status does not allow';

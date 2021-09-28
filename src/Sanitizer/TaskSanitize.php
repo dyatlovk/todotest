@@ -16,8 +16,16 @@ class TaskSanitize
      */
     public function prepare(array $formData): self
     {
-        if (isset($formData['title'])) {
-            $this->cleanedData['title'] = htmlspecialchars($formData['title']);
+        if (isset($formData['username'])) {
+            $this->cleanedData['username'] = htmlspecialchars($formData['username']);
+        }
+        if (isset($formData['email'])) {
+            $sanitized_email = filter_var($formData['email'], FILTER_SANITIZE_EMAIL);
+            if ($sanitized_email) {
+                $this->cleanedData['email'] = htmlspecialchars($sanitized_email);
+            } else {
+                $this->cleanedData['email'] = htmlspecialchars($formData['email']);
+            }
         }
         if (isset($formData['text'])) {
             $this->cleanedData['text'] = htmlspecialchars($formData['text']);

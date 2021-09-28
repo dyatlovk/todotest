@@ -15,7 +15,6 @@ class TasksController extends BaseController
 
     public function add(): string
     {
-        $this->denyAnon();
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $previousData = $_SESSION[self::FORM_NAME]['data'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
@@ -36,13 +35,13 @@ class TasksController extends BaseController
      */
     public function edit(array $routerArgs): string
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             $this->createNotFound();
         }
-        $this->accessOwnerOrAdmin($task);
         $formErrors = $_SESSION[self::FORM_NAME]['errors'];
         $_SESSION[self::FORM_NAME]['errors'] = null;
         $currentStatusId = (int) $task['task_status'];
@@ -58,7 +57,6 @@ class TasksController extends BaseController
 
     public function create(): void
     {
-        $this->denyAnon();
         $formData = $_POST[self::FORM_NAME];
         $formValidator = new TaskValidator();
         $formValidator->validateData($formData);
@@ -86,10 +84,10 @@ class TasksController extends BaseController
      */
     public function update(array $routerArgs): void
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
-        $this->accessOwnerOrAdmin($task);
         $formData = $_POST[self::FORM_NAME];
         $formValidator = new TaskValidator();
         $formValidator->validateData($formData);
@@ -119,13 +117,13 @@ class TasksController extends BaseController
      */
     public function delete(array $routerArgs): void
     {
+        $this->denyAnon();
         $taskId = (int) $routerArgs[0];
         $taskModel = new Tasks();
         $task = $taskModel->findSingle($taskId);
         if (empty($task)) {
             $this->createNotFound();
         }
-        $this->accessOwnerOrAdmin($task);
         $result = $taskModel->delete($taskId);
         if (false == $result) {
             return;

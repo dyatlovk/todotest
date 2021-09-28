@@ -52,11 +52,11 @@ class Pages
         $pages = $taskModel->pages($this->max);
         unset($this->request[$this->key]);
         $prevQuery = '';
-        if (false == empty($request)) {
+        if (false == empty($this->request)) {
             $prevQuery = '?' . http_build_query($this->request);
         }
         $prefix = '&';
-        if (empty($request)) {
+        if (empty($this->request)) {
             $prefix = '?';
         }
 

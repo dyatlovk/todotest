@@ -141,6 +141,58 @@ class User
         return true;
     }
 
+    /**
+     * @return array<string, int|string|null>
+     */
+    public function create(string $email, string $name, string $pass, ?int $role = null): ?array
+    {
+        $sql = 'INSERT INTO user (username, email, password, role) VALUES(:name, :email, :pass, :role)';
+        $conn = $this->getConnection();
+        $query = $conn->prepare($sql);
+        $query->bindValue(':name', $name, PDO::PARAM_STR);
+        $query->bindValue(':email', $email, PDO::PARAM_STR);
+        $query->bindValue(':pass', $pass, PDO::PARAM_STR);
+        $query->bindValue(':role', $role);
+        $result = $query->execute();
+
+        if ($result) {
+            $id = $conn->lastInsertId();
+
+            return [
+                'user_id' => $id,
+                'username' => $name,
+                'email' => $email,
+                'password' => $pass,
+                'role' => $role,
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<string|int>
+     */
+    public function createIfNotExist(string $name, string $email): ?array
+    {
+        $user = $this->findByEmail($email);
+        if (false == empty($user)) {
+            return $user;
+        }
+
+        $randomPass = $this->createRandomPassword();
+        $newUser = $this->create($email, $name, $randomPass);
+
+        return $newUser;
+    }
+
+    public function createRandomPassword(int $length = 8): string
+    {
+        $bytes = random_bytes($length);
+
+        return bin2hex($bytes);
+    }
+
     private function getConnection(): PDO
     {
         $app = Kernel::getInstance();
