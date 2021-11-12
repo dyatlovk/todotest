@@ -21,7 +21,7 @@ class Kernel
 
     public static function getRootDir(): string
     {
-        return __DIR__ . '/../../';
+        return $_SERVER['DOCUMENT_ROOT'] . '/../';
     }
 
     public function getDbConnection(): \PDO
