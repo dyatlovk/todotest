@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\System;
+use App\System\Templates;
 
 class Router
 {
@@ -72,11 +73,13 @@ class Router
         if (!$route_match_found) {
             if ($path_match_found) {
                 header('HTTP/1.0 405 Method Not Allowed');
+                echo (new Templates())->render('errors/403.php');
                 if (self::$methodNotAllowed) {
                     call_user_func_array(self::$methodNotAllowed, [$path, $method]);
                 }
             } else {
                 header('HTTP/1.0 404 Not Found');
+                echo (new Templates())->render('errors/404.php');
                 if (self::$pathNotFound) {
                     call_user_func_array(self::$pathNotFound, [$path]);
                 }
