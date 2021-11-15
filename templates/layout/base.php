@@ -8,8 +8,12 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body <?php echo $this->block('body_attr'); ?>>
-    <main>
-        <?php echo $this->block('content'); ?>
+        <main>
+             <div class="container">
+                <div class="py-5">
+                    <?php echo $this->block('content'); ?>
+                </div>
+            </div>
     </main>
     <?php echo $this->block('js'); ?>
 </body>

@@ -93,64 +93,74 @@ class FormBuilder
         echo '</form>';
     }
 
-    public function renderField(string $name): void
+    public function renderField(string $name, string $class = ''): void
     {
         $field = $this->getField($name);
         if (is_null($field)) {
             return;
         }
         $inputName = $this->formName . '[' . $field['name'] . ']';
+        $id = $this->formName . '_' . $field['name'];
+        $errorField = $this->getError($name);
 
         if ($field['type'] === self::TYPE_TEXT) {
-            echo '<input type="text" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
+            echo '<input id="' . $id . '" type="text" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
         }
 
         if ($field['type'] === self::TYPE_HIDDEN) {
-            echo '<input type="hidden" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
+            echo '<input id="' . $id . '" type="hidden" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
         }
 
         if ($field['type'] === self::TYPE_EMAIL) {
-            echo '<input type="email" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
+            echo '<input id="' . $id . '" type="email" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '" value="' . $field['attr']['value'] . '">';
         }
 
         if ($field['type'] === self::TYPE_RADIO) {
             $checked = $field['attr']['value'];
+            $radioCount = 0;
             foreach ($field['attr']['choices'] as $label => $val) {
-                echo '<label>';
-                echo '<span>' . $label . '</span>';
-                echo '<input type="radio" name="' . $inputName . '" value="' . $val . '" ' . ($checked == $val ? "checked" : "") . '>';
-                echo '</label>';
+                echo '<div class="form-check">';
+                echo '<input id="' . $id . '_' . $radioCount . '" type="radio" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '" value="' . $val . '" ' . ($checked == $val ? "checked" : "") . '>';
+                echo '<label for="' . $id . '_' . $radioCount . '" class="form-check-label">' . $label . '</label>';
+                echo '</div>';
+                ++$radioCount;
             }
         }
 
         if ($field['type'] === self::TYPE_TEXTAREA) {
-            echo '<label>';
-            echo '<span>' . $field['name'] . '</span>';
-            echo '<textarea name="' . $inputName . '">' . $field['attr']['value'] . '</textarea>';
-            echo '</label>';
+            echo '<textarea id="' . $id . '" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '">' . $field['attr']['value'] . '</textarea>';
         }
 
         if ($field['type'] === self::TYPE_CHECKBOX) {
+            $checkCount = 0;
             $values = $field['attr']['value'];
             $checked = false;
             foreach ($field['attr']['choices'] as $label => $val) {
                 if (in_array($val, $values)) {
                     $checked = true;
                 }
-                echo '<label>';
-                echo '<span>' . $label . '</span>';
-                echo '<input type="checkbox" name="' . $inputName . '[]" value="' . $val . '" ' . ($checked ? "checked" : "") . '>';
-                echo '</label>';
+                echo '<div class="form-check">';
+                echo '<input id="' . $id . '_' . $checkCount . '" type="checkbox" class="' . $class . (empty($errorField) ? '' : ' is-invalid') . '" name="' . $inputName . '[]" value="' . $val . '" ' . ($checked ? "checked" : "") . '>';
+                echo '<label for="' . $id . '_' . $checkCount . '" class="form-check-label">' . $label . '</label>';
+                echo '</div>';
                 $checked = false;
+                ++$checkCount;
             }
         }
+    }
+
+    public function renderLabel(string $name)
+    {
+        $field = $this->getField($name);
+        $id = $this->formName . '_' . $field['name'];
+        echo '<div>' . $field['name'] . '</div>';
     }
 
     public function renderError(string $name): void
     {
         $errors = $this->getError($name);
         foreach ($errors as $msg) {
-            echo '<div class="form-error-msg">' . $msg . '</div>';
+            echo '<div class="invalid-feedback">' . $msg . '</div>';
         }
     }
 
