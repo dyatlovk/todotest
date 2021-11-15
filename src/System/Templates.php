@@ -64,8 +64,9 @@ class Templates
         extract($args);
 
         ob_start();
-        require $file;
-        $content = ob_get_clean();
+        include $file;
+        $content = ob_get_contents();
+        ob_end_clean();
 
         return (string) $content;
     }

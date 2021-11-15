@@ -6,6 +6,5 @@ use App\System\Kernel;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-${Kernel::NAME} = new Kernel();
+${Kernel::NAME} = new Kernel(Kernel::ENV_DEV);
 ${Kernel::NAME}->boot();
-global ${Kernel::NAME};

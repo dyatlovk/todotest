@@ -18,12 +18,13 @@ class Router
     /** @var array<string> */
     private static array $routes = [];
 
-    public static function add(string $uri, string $method = self::GET, string $controller): void
+    public static function add(string $uri, string $alias, array $method = self::GET, string $controller): void
     {
         array_push(self::$routes, [
             'expression' => $uri,
             'method' => $method,
             'controller' => $controller,
+            'alias' => $alias,
         ]);
     }
 
@@ -37,24 +38,39 @@ class Router
         self::$methodNotAllowed = $function;
     }
 
+    public static function findByAlias(?string $alias): ?array
+    {
+        if (empty($alias)) {
+            return null;
+        }
+        $result = null;
+        $routes = self::$routes;
+        foreach ($routes as $route) {
+            if ($alias === $route['alias']) {
+                return $route;
+            }
+        }
+
+        return $result;
+    }
+
     public static function run(string $basepath = '/'): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+        $path = '/';
         if (isset($parsed_url['path'])) {
             $path = $parsed_url['path'];
-        } else {
-            $path = '/';
         }
         foreach (self::$routes as $route) {
-            if ('' != $basepath && '/' != $basepath) {
+            if ('' !== $basepath && '/' !== $basepath) {
                 $route['expression'] = '(' . $basepath . ')' . $route['expression'];
             }
             $route['expression'] = '^' . $route['expression'];
             $route['expression'] = $route['expression'] . '$';
             if (preg_match('#' . $route['expression'] . '#', $path, $matches)) {
                 $path_match_found = true;
-                if (strtolower($method) === strtolower($route['method'])) {
+                if (in_array($method, $route['method'])) {
                     array_shift($matches);
                     if ('' !== $basepath && '/' !== $basepath) {
                         array_shift($matches);
@@ -65,8 +81,7 @@ class Router
                     $controllerAction = $controllerParts[1];
                     $cont = new $controller();
                     echo (string) $cont->$controllerAction($matches);
-                    $route_match_found = true;
-                    break;
+                    return;
                 }
             }
         }

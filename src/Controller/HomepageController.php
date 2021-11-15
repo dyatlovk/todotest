@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Tasks;
-use App\Order;
-use App\Pages;
+use App\Forms\TestForm;
+use App\System\Router;
+use App\System\Templates;
 
-class HomepageController extends BaseController
+class HomepageController
 {
-    private const ITEMS_ON_PAGE = 13;
-
     public function index(): string
     {
-        $order = new Order('sort', 'dir', $_REQUEST);
-        $pages = new Pages('p', $_REQUEST, self::ITEMS_ON_PAGE);
-        $taskModel = new Tasks();
-        $tasksStartAt = $pages->findBounding()->start;
-        $tasksLimit = $pages->findBounding()->end;
-        $tasksOrderExpr = $order->prepareSql();
-        $list = $taskModel->getAll($tasksStartAt, $tasksLimit, $tasksOrderExpr);
-
-        return $this->render('home/index.php', [
-            'taskList' => $list,
-            'orderQuery' => $order->buildQuery(),
-            'pageQuery' => $pages->buildQuery(),
+        $form = (new TestForm())->build();
+        if ($form->isSubmit() && $form->isValid()) {
+        }
+        return (new Templates())->render('home/index.php', [
+            'form' => $form,
         ]);
+    }
+
+    public function test(): string
+    {
+        return (new Templates())->render('home/test.php');
+    }
+
+    public function testEntry(): string
+    {
+        return 'test entry';
     }
 }

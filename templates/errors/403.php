@@ -11,7 +11,7 @@
         <div class="container">
             <div class="content-center">
                 <h1>Access Denied</h1>
-                <p>You dont have permissions to edit this task</p>
+                <p>You dont have permissions to this page</p>
             </div>
         </div>
     </body>

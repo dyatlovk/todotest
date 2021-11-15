@@ -9,14 +9,36 @@ class Kernel
     public const SESSION_TTL = 3600 * 24;
     public const NAME = 'kernel';
 
+    public const ENV_PROD = 'prod';
+    public const ENV_DEV = 'dev';
+    public const ENV = [
+        self::ENV_DEV,
+        self::ENV_PROD,
+    ];
+
     /** @var array<string> */
     private array $db = [];
+    private string $env = self::ENV_PROD;
+
+    public function __construct(?string $env = self::ENV_PROD)
+    {
+        $this->env = $env;
+        if ($env !== self::ENV_PROD) {
+            ini_set('display_errors', '1');
+        }
+    }
+
+    public function getEnv(): string
+    {
+        return $this->env;
+    }
 
     public function boot(): void
     {
         $this->startSession();
         $this->loadDbConfig();
         $this->loadRouters();
+        global ${Kernel::NAME};
     }
 
     public static function getRootDir(): string
