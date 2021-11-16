@@ -14,6 +14,7 @@ class FormBuilder
     public const TYPE_RADIO = 'radio';
     public const TYPE_CHECKBOX = 'checkbox';
     public const TYPE_HIDDEN = 'hidden';
+    public const TYPE_SELECT = 'select';
 
     private array $fields = [];
     private array $formAttr = [];
@@ -146,6 +147,22 @@ class FormBuilder
                 $checked = false;
                 ++$checkCount;
             }
+        }
+
+        if ($field['type'] === self::TYPE_SELECT) {
+            $checkCount = 0;
+            $values = $field['attr']['value'];
+            $checked = false;
+            echo '<select name="' . $inputName . '[]" class="form-select">';
+            foreach ($field['attr']['choices'] as $label => $val) {
+                if (in_array($val, $values)) {
+                    $checked = true;
+                }
+                echo '<option value="' . $val . '" ' . ($checked ? "selected" : "") . '>' . $label . '</option>';
+                $checked = false;
+                ++$checkCount;
+            }
+            echo '</select>';
         }
     }
 

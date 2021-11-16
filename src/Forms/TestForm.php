@@ -28,6 +28,11 @@ class TestForm
             'bar' => 2,
             'foobar' => 3,
         ]]);
+        $form->add('select', 'select', ['class' => 'select', 'value' => [1], 'choices' => [
+            'foo' => 1,
+            'bar' => 2,
+            'foobar' => 3,
+        ]]);
         $form->add('token', 'hidden', ['value' => $form->generateCSRFToken()], [new CSRF($form->getName())]);
 
         return $form;

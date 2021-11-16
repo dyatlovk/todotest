@@ -31,6 +31,11 @@
             <?php $form->renderField('checkbox', 'form-check-input'); ?>
             <?php $form->renderError('checkbox'); ?>
         </div>
+        <div class="col-sm-6">
+            <?php $form->renderLabel('select'); ?>
+            <?php $form->renderField('select', 'form-select'); ?>
+            <?php $form->renderError('select'); ?>
+        </div>
         <?php $form->renderField('token'); ?>
         <button class="btn btn-primary" type="submit">Submit</button>
     </div>
