@@ -36,7 +36,7 @@ class Kernel
     public function boot(): void
     {
         $this->startSession();
-        $this->loadDbConfig();
+        /* $this->loadDbConfig(); */
         $this->loadRouters();
         global ${Kernel::NAME};
     }
@@ -77,6 +77,7 @@ class Kernel
 
     private function startSession(): void
     {
+        ini_set('session.name', 'SESSID');
         session_set_cookie_params(self::SESSION_TTL, '/', '', true, true);
         session_start();
     }

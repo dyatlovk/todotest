@@ -222,6 +222,7 @@ class FormBuilder
             }
         }
         if ($errorsCount > 0) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
             return false;
         }
         return true;
