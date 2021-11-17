@@ -37,6 +37,7 @@
             <?php $form->renderError('select'); ?>
         </div>
         <?php $form->renderField('token'); ?>
+        <?php $form->renderError('token'); ?>
         <button class="btn btn-primary" type="submit">Submit</button>
     </div>
     <?php $form->end(); ?>

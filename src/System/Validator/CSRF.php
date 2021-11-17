@@ -19,6 +19,10 @@ class CSRF implements ValidatorInterface
     public function validate($data): array
     {
         $result = ['status' => false, 'msg' => $this->msg];
+        if (false == isset($_POST[$this->formName]['token'])) {
+            $result = ['status' => false, 'msg' => $this->msg];
+            return $result;
+        }
 
         $tokenRequest = $_POST[$this->formName]['token'];
         $tokenInSession = $_SESSION[$this->formName . '_token'];
